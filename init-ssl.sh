@@ -69,6 +69,10 @@ for domain in "${DOMAINS[@]}"; do
     rm -rf "./certbot/conf/live/$domain"
 done
 
+echo -e "${YELLOW}Dừng container certbot cũ (nếu có)...${NC}"
+docker stop asset-management-certbot >/dev/null 2>&1 || true
+docker rm asset-management-certbot >/dev/null 2>&1 || true
+
 # Tạo real certificates
 echo -e "${GREEN}Tạo SSL certificates thật...${NC}"
 
