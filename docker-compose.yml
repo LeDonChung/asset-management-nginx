@@ -1,0 +1,68 @@
+version: '3.8'
+
+services:
+  nginx:
+    build: .
+    container_name: asset-management-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./certbot/conf:/etc/letsencrypt:ro
+      - ./certbot/www:/var/www/certbot:ro
+    restart: unless-stopped
+    networks:
+      - asset-management-network
+    depends_on:
+      - certbot
+
+  certbot:
+    image: certbot/certbot:latest
+    container_name: asset-management-certbot
+    volumes:
+      - ./certbot/conf:/etc/letsencrypt
+      - ./certbot/www:/var/www/certbot
+    command: certonly --webroot --webroot-path=/var/www/certbot --email ledonchung12a2@gmail.com --agree-tos --no-eff-email -d api.codeshare.id.vn -d socket.codeshare.id.vn -d asset.codeshare.id.vn
+    networks:
+      - asset-management-network
+
+  # Certbot renewal service
+  certbot-renewal:
+    image: certbot/certbot:latest
+    container_name: asset-management-certbot-renewal
+    volumes:
+      - ./certbot/conf:/etc/letsencrypt
+      - ./certbot/www:/var/www/certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+    networks:
+      - asset-management-network
+
+  # Các service backend (có thể uncomment nếu muốn chạy tất cả cùng nhau)
+  # api:
+  #   image: your-api-image:latest
+  #   container_name: asset-management-api
+  #   ports:
+  #     - "3000:3000"
+  #   networks:
+  #     - asset-management-network
+
+  # socket:
+  #   image: your-socket-image:latest
+  #   container_name: asset-management-socket
+  #   ports:
+  #     - "3001:3001"
+  #   networks:
+  #     - asset-management-network
+
+  # asset:
+  #   image: your-asset-image:latest
+  #   container_name: asset-management-asset
+  #   ports:
+  #     - "3002:3002"
+  #   networks:
+  #     - asset-management-network
+
+networks:
+  asset-management-network:
+    driver: bridge
