@@ -109,15 +109,15 @@ http {
 EOF
 echo -e "${GREEN}✅ Config tạm thời đã tạo${NC}"
 
-# Start nginx với config tạm thời
+# Start nginx với config tạm thời (không start certbot để tránh xung đột)
 echo -e "${GREEN}[6/8] Khởi động nginx tạm thời...${NC}"
-docker-compose up -d nginx
+docker-compose up -d --no-deps nginx
 sleep 10
 echo -e "${GREEN}✅ Nginx đã khởi động${NC}"
 
 # Tạo SSL certificates
 echo -e "${GREEN}[7/8] Tạo SSL certificates...${NC}"
-CERTBOT_ARGS="certonly --webroot --webroot-path=/var/www/certbot --email $EMAIL --agree-tos --no-eff-email"
+CERTBOT_ARGS="certonly --webroot --webroot-path=/var/www/certbot --email $EMAIL --agree-tos --no-eff-email --non-interactive --force-renewal"
 
 if [ $STAGING -eq 1 ]; then
     CERTBOT_ARGS="$CERTBOT_ARGS --staging"
