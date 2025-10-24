@@ -38,31 +38,6 @@ services:
     networks:
       - asset-management-network
 
-  # Các service backend (có thể uncomment nếu muốn chạy tất cả cùng nhau)
-  # api:
-  #   image: your-api-image:latest
-  #   container_name: asset-management-api
-  #   ports:
-  #     - "3000:3000"
-  #   networks:
-  #     - asset-management-network
-
-  # socket:
-  #   image: your-socket-image:latest
-  #   container_name: asset-management-socket
-  #   ports:
-  #     - "3001:3001"
-  #   networks:
-  #     - asset-management-network
-
-  # asset:
-  #   image: your-asset-image:latest
-  #   container_name: asset-management-asset
-  #   ports:
-  #     - "3002:3002"
-  #   networks:
-  #     - asset-management-network
-
 networks:
   asset-management-network:
     driver: bridge
