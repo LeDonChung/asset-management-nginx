@@ -70,15 +70,15 @@ events {
 http {
     # Upstream backends
     upstream api_backend {
-        server 34.133.206.14:3000;
+        server 34.61.204.169:3000;
     }
 
     upstream socket_backend {
-        server 34.133.206.14:3001;
+        server 34.61.204.169:3001;
     }
 
     upstream asset_backend {
-        server 34.133.206.14:3002;
+        server 34.61.204.169:3002;
     }
 
     # Temporary HTTP-only config for SSL challenge
@@ -162,15 +162,15 @@ events {
 
 http {
     upstream api_backend {
-        server 34.133.206.14:3000;
+        server 34.61.204.169:3000;
     }
 
     upstream socket_backend {
-        server 34.133.206.14:3001;
+        server 34.61.204.169:3001;
     }
 
     upstream asset_backend {
-        server 34.133.206.14:3002;
+        server 34.61.204.169:3002;
     }
 
     # Rate limiting

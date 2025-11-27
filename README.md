@@ -4,9 +4,9 @@ Cấu hình nginx để proxy các service của hệ thống quản lý tài s�
 
 ## Cấu hình Service
 
-- **API Service**: `34.133.206.14:3000` → `https://api.codeshare.id.vn`
-- **Socket Service**: `34.133.206.14:3001` → `https://socket.codeshare.id.vn` 
-- **Asset Service**: `34.133.206.14:3002` → `https://asset.codeshare.id.vn` (có hỗ trợ WebSocket)
+- **API Service**: `34.61.204.169:3000` → `https://api.codeshare.id.vn`
+- **Socket Service**: `34.61.204.169:3001` → `https://socket.codeshare.id.vn` 
+- **Asset Service**: `34.61.204.169:3002` → `https://asset.codeshare.id.vn` (có hỗ trợ WebSocket)
 
 ## Tính năng
 
