@@ -68,6 +68,8 @@ events {
 }
 
 http {
+    client_max_body_size 10M;
+    
     # Upstream backends
     upstream api_backend {
         server 34.61.204.169:3000;
@@ -161,6 +163,8 @@ events {
 }
 
 http {
+    client_max_body_size 10M;
+    
     upstream api_backend {
         server 34.61.204.169:3000;
     }
