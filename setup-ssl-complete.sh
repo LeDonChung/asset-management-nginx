@@ -136,7 +136,6 @@ echo -e "${YELLOW}Đang tạo certificates...${NC}"
 docker run --rm \
     -v "$(pwd)/certbot/conf:/etc/letsencrypt" \
     -v "$(pwd)/certbot/www:/var/www/certbot" \
-    --network asset-management-nginx_asset-management-network \
     certbot/certbot $CERTBOT_ARGS
 
 if [ $? -eq 0 ]; then
