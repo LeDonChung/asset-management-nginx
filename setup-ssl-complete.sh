@@ -117,31 +117,43 @@ docker-compose up -d --no-deps nginx
 sleep 10
 echo -e "${GREEN}✅ Nginx đã khởi động${NC}"
 
-# Tạo SSL certificates
+# Tạo SSL certificates (mỗi domain một certificate riêng)
 echo -e "${GREEN}[7/8] Tạo SSL certificates...${NC}"
-CERTBOT_ARGS="certonly --webroot --webroot-path=/var/www/certbot --email $EMAIL --agree-tos --no-eff-email --non-interactive --force-renewal"
+CERTBOT_BASE_ARGS="certonly --webroot --webroot-path=/var/www/certbot --email $EMAIL --agree-tos --no-eff-email --non-interactive --force-renewal"
 
 if [ $STAGING -eq 1 ]; then
-    CERTBOT_ARGS="$CERTBOT_ARGS --staging"
+    CERTBOT_BASE_ARGS="$CERTBOT_BASE_ARGS --staging"
     echo -e "${YELLOW}⚠️  Sử dụng staging environment (testing)${NC}"
 fi
 
-# Thêm tất cả domains
+# Tạo certificate riêng cho từng domain
+FAILED=0
 for domain in "${DOMAINS[@]}"; do
-    CERTBOT_ARGS="$CERTBOT_ARGS -d $domain"
+    echo -e "${YELLOW}Đang tạo certificate cho: $domain${NC}"
+    
+    docker run --rm \
+        -v "$(pwd)/certbot/conf:/etc/letsencrypt" \
+        -v "$(pwd)/certbot/www:/var/www/certbot" \
+        certbot/certbot $CERTBOT_BASE_ARGS -d $domain
+    
+    if [ $? -eq 0 ]; then
+        echo -e "${GREEN}✅ Certificate cho $domain đã tạo thành công!${NC}"
+    else
+        echo -e "${RED}❌ Tạo certificate cho $domain thất bại!${NC}"
+        FAILED=1
+    fi
+    
+    # Đợi 5 giây giữa các request để tránh rate limit
+    if [ "$domain" != "${DOMAINS[-1]}" ]; then
+        echo -e "${YELLOW}Đợi 5 giây trước khi tạo certificate tiếp theo...${NC}"
+        sleep 5
+    fi
 done
 
-# Chạy certbot
-echo -e "${YELLOW}Đang tạo certificates...${NC}"
-docker run --rm \
-    -v "$(pwd)/certbot/conf:/etc/letsencrypt" \
-    -v "$(pwd)/certbot/www:/var/www/certbot" \
-    certbot/certbot $CERTBOT_ARGS
-
-if [ $? -eq 0 ]; then
-    echo -e "${GREEN}✅ SSL certificates đã tạo thành công!${NC}"
+if [ $FAILED -eq 0 ]; then
+    echo -e "${GREEN}✅ Tất cả SSL certificates đã tạo thành công!${NC}"
 else
-    echo -e "${RED}❌ Tạo SSL certificates thất bại!${NC}"
+    echo -e "${RED}❌ Một số certificates thất bại!${NC}"
     echo -e "${YELLOW}Khôi phục nginx config gốc...${NC}"
     if [ -f "nginx.conf.ssl-backup" ]; then
         cp nginx.conf.ssl-backup nginx.conf
