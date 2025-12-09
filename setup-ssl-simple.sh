@@ -50,7 +50,7 @@ echo -e "${GREEN}✅ Thư mục đã tạo${NC}"
 # Backup nginx config gốc
 echo -e "${GREEN}[4/6] Backup nginx config...${NC}"
 if [ -f "nginx.conf" ]; then
-    cp nginx.conf nginx.conf.ssl-backup
+    sudo cp nginx.conf nginx.conf.ssl-backup 2>/dev/null || cp nginx.conf nginx.conf.ssl-backup
     echo -e "${GREEN}✅ Đã backup nginx.conf${NC}"
 fi
 
