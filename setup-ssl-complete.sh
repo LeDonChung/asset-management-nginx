@@ -72,15 +72,15 @@ http {
     
     # Upstream backends
     upstream api_backend {
-        server 209.97.171.45:3000;
+        server 34.135.223.246:3000;
     }
 
     upstream socket_backend {
-        server 209.97.171.45:3001;
+        server 34.135.223.246:3001;
     }
 
     upstream asset_backend {
-        server 209.97.171.45:3002;
+        server 34.135.223.246:3002;
     }
 
     # Temporary HTTP-only config for SSL challenge
@@ -166,15 +166,15 @@ http {
     client_max_body_size 10M;
     
     upstream api_backend {
-        server 209.97.171.45:3000;
+        server 34.135.223.246:3000;
     }
 
     upstream socket_backend {
-        server 209.97.171.45:3001;
+        server 34.135.223.246:3001;
     }
 
     upstream asset_backend {
-        server 209.97.171.45:3002;
+        server 34.135.223.246:3002;
     }
 
     # Rate limiting
