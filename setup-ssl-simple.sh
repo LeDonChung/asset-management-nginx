@@ -66,15 +66,15 @@ http {
     
     # Upstream backends
     upstream asset_backend {
-        server 34.135.223.246:3002;
+        server 178.128.123.115:3002;
     }
 
     upstream api_backend {
-        server 34.135.223.246:3000;
+        server 178.128.123.115:3000;
     }
 
     upstream socket_backend {
-        server 34.135.223.246:3001;
+        server 178.128.123.115:3001;
     }
     
 
