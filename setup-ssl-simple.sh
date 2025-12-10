@@ -14,9 +14,9 @@ NC='\033[0m'
 
 # Configuration
 DOMAINS=(
+    "asset.codeshare.id.vn"
     "api.codeshare.id.vn"
     "socket.codeshare.id.vn"
-    "asset.codeshare.id.vn"
 )
 EMAIL="ledonchung12a2@gmail.com"
 STAGING=0  # Set to 1 for testing
@@ -65,6 +65,10 @@ http {
     client_max_body_size 10M;
     
     # Upstream backends
+    upstream asset_backend {
+        server 34.135.223.246:3002;
+    }
+
     upstream api_backend {
         server 34.135.223.246:3000;
     }
@@ -72,15 +76,12 @@ http {
     upstream socket_backend {
         server 34.135.223.246:3001;
     }
-
-    upstream asset_backend {
-        server 34.135.223.246:3002;
-    }
+    
 
     # Temporary HTTP-only config for SSL challenge
     server {
         listen 80;
-        server_name api.codeshare.id.vn socket.codeshare.id.vn asset.codeshare.id.vn;
+        server_name asset.codeshare.id.vn api.codeshare.id.vn socket.codeshare.id.vn;
         
         # Let's Encrypt challenge path
         location /.well-known/acme-challenge/ {
@@ -179,15 +180,15 @@ done
 
 echo -e ""
 echo -e "${YELLOW}Certificates được tạo tại:${NC}"
+echo -e "  ./certbot/conf/live/asset.codeshare.id.vn/"
 echo -e "  ./certbot/conf/live/api.codeshare.id.vn/"
 echo -e "  ./certbot/conf/live/socket.codeshare.id.vn/"
-echo -e "  ./certbot/conf/live/asset.codeshare.id.vn/"
 
 echo -e ""
 echo -e "${YELLOW}Kiểm tra SSL:${NC}"
+echo -e "  curl -I https://asset.codeshare.id.vn"
 echo -e "  curl -I https://api.codeshare.id.vn"
 echo -e "  curl -I https://socket.codeshare.id.vn"
-echo -e "  curl -I https://asset.codeshare.id.vn"
 
 echo -e ""
 echo -e "${YELLOW}Kiểm tra nginx:${NC}"
